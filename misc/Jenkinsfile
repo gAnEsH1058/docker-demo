@@ -9,9 +9,18 @@ node {
        sh 'npm install --only=dev'
        sh 'npm test'
     }
-   stage('docker build/push') {
-     docker.withRegistry('https://us.gcr.io', 'gcr:[sample-test-gcp-project]') {
-       def app = docker.build("wardviaene/docker-nodejs-demo:${commit_id}", '.').push()
-     }
-   }
+ //**  stage('docker build/push') {
+  //   docker.withRegistry('https://us.gcr.io', 'gcr:[sample-test-gcp-project]') {
+    //   def app = docker.build("moregane/ganeshmore:${commit_id}", '.').push()
+    // }
+   //}
+   stage('Build image') {
+  app = docker.build("sample-test-gcp-project/node")
+}
+stage('Push image') {
+  docker.withRegistry('https://eu.gcr.io', 'gcr:sample-test-gcp-project') {
+    app.push("${env.BUILD_NUMBER}")
+    app.push("latest")
+  }
+}
 }
