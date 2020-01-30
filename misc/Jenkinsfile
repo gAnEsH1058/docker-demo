@@ -19,4 +19,7 @@ node {
            def app = docker.build("moregane/modejs:${commit_id}", '.').push()
      }
    }
+   stage ('Execute JMeter Performance Tests'){
+   build job: 'JMeter - Freestyle'
+   }
 }
